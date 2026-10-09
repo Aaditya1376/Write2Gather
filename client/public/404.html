@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Opening Write2Gather…</title>
+    <script>
+      const base = "/Write2Gather";
+      const path = window.location.pathname.startsWith(base)
+        ? window.location.pathname.slice(base.length) || "/"
+        : "/";
+      const destination = `${path}${window.location.search}${window.location.hash}`;
+      window.location.replace(`${base}/?p=${encodeURIComponent(destination)}`);
+    </script>
+  </head>
+  <body>
+    <p>Opening Write2Gather…</p>
+  </body>
+</html>

@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Write2Gather - write together, in real time." />
     <title>Write2Gather</title>
+    <script>
+      const redirect = new URLSearchParams(window.location.search).get("p");
+      if (redirect?.startsWith("/") && !redirect.startsWith("//")) {
+        window.history.replaceState(null, "", `/Write2Gather${redirect}`);
+      }
+    </script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><rect width=%27100%27 height=%27100%27 rx=%2716%27 fill=%27%2335645a%27/><path d=%27M27 33v43h37%27 fill=%27none%27 stroke=%27white%27 stroke-width=%275%27 stroke-linecap=%27round%27/><path d=%27M39 24h27l13 13v38a4 4 0 0 1-4 4H43a4 4 0 0 1-4-4V28a4 4 0 0 1 4-4zM66 25v13h13M49 49h20M49 60h20%27 fill=%27none%27 stroke=%27white%27 stroke-width=%275%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/></svg>" />
   </head>
   <body>

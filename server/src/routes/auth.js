@@ -1,6 +1,8 @@
 import { Router } from "express";
 import bcrypt from "bcryptjs";
+import { createHash, randomBytes } from "node:crypto";
 import rateLimit from "express-rate-limit";
+import { config } from "../config.js";
 import { User } from "../models/User.js";
 import { requireAuth } from "../middleware/auth.js";
 import { HttpError, asyncHandler } from "../utils/http.js";
@@ -23,6 +25,16 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: "Too many attempts, please try again in a few minutes" },
 });
+
+const passwordResetLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many password reset attempts. Please try again later." },
+});
+
+const hashResetToken = (token) => createHash("sha256").update(token).digest("hex");
 
 // Sends back the user + a fresh access token, and (re)sets the refresh cookie.
 function startSession(res, user) {
@@ -60,6 +72,74 @@ router.post(
   })
 );
 
+router.post(
+  "/forgot-password",
+  passwordResetLimiter,
+  asyncHandler(async (req, res) => {
+    const email = cleanEmail(req.body.email);
+    if (!config.resendApiKey || !config.passwordResetFrom) {
+      throw new HttpError(503, "Password reset email is not configured. Please contact the site administrator.");
+    }
+
+    const user = await User.findOne({ email });
+    if (user) {
+      const token = randomBytes(32).toString("hex");
+      user.passwordResetTokenHash = hashResetToken(token);
+      user.passwordResetExpiresAt = new Date(Date.now() + 60 * 60 * 1000);
+      await user.save();
+
+      const resetUrl = `${config.clientUrl.replace(/\/$/, "")}${config.clientBasePath}/reset-password?token=${encodeURIComponent(token)}`;
+      try {
+        const response = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${config.resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: config.passwordResetFrom,
+            to: [user.email],
+            subject: "Reset your Write2Gather password",
+            text: `Use this link to reset your Write2Gather password. It expires in one hour: ${resetUrl}`,
+            html: `<p>We received a request to reset your Write2Gather password.</p><p><a href="${resetUrl}">Reset your password</a></p><p>This link expires in one hour. If you did not request this, you can ignore this email.</p>`,
+          }),
+        });
+        if (!response.ok) throw new Error(`Email provider returned ${response.status}`);
+      } catch (error) {
+        user.passwordResetTokenHash = null;
+        user.passwordResetExpiresAt = null;
+        await user.save();
+        console.error("Password reset email could not be sent", error);
+        throw new HttpError(503, "We could not send the reset email right now. Please try again later.");
+      }
+    }
+
+    // Use the same response whether or not an account uses this email.
+    res.json({ message: "If an account uses that email, a password reset link has been sent." });
+  })
+);
+
+router.post(
+  "/reset-password",
+  passwordResetLimiter,
+  asyncHandler(async (req, res) => {
+    const token = cleanString(req.body.token, { field: "Reset token", max: 200 });
+    const password = cleanPassword(req.body.password);
+    const user = await User.findOne({
+      passwordResetTokenHash: hashResetToken(token),
+      passwordResetExpiresAt: { $gt: new Date() },
+    }).select("+passwordResetTokenHash +passwordResetExpiresAt");
+    if (!user) throw new HttpError(400, "This password reset link is invalid or expired. Request a new one.");
+
+    user.passwordHash = await bcrypt.hash(password, 12);
+    user.passwordChangedAt = new Date();
+    user.passwordResetTokenHash = null;
+    user.passwordResetExpiresAt = null;
+    await user.save();
+    res.json({ message: "Password updated. You can now log in with your new password." });
+  })
+);
+
 // Called by the client on every page load to get a new access token from the refresh cookie.
 router.post(
   "/refresh",
@@ -74,6 +154,9 @@ router.post(
     }
     const user = await User.findById(payload.sub);
     if (!user) throw new HttpError(401, "Not logged in");
+    if (user.passwordChangedAt && payload.iat < Math.floor(user.passwordChangedAt.getTime() / 1000)) {
+      throw new HttpError(401, "Password changed. Please log in again.");
+    }
     startSession(res, user);
   })
 );

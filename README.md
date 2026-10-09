@@ -93,6 +93,7 @@ client/src
 - **API (Render / Railway / Fly):** root directory `server`, build `npm install`, start `npm start`. Set the variables from `.env.example`, plus `NODE_ENV=production` and `CLIENT_URL=https://your-frontend-url`. (This server keeps live documents in memory, so run **one instance**.)
 - **Frontend (Vercel / Netlify):** root directory `client`, build `npm run build`, output `dist`. Set `VITE_API_URL=https://your-api-url`. Add a rewrite of all paths to `/index.html` so React Router works.
 - Cross-domain cookies need HTTPS: production mode already sets `SameSite=None; Secure` on the refresh cookie.
+- Password recovery uses [Resend](https://resend.com/). Configure `RESEND_API_KEY` and `PASSWORD_RESET_FROM` on the server, and set `CLIENT_URL` to the frontend origin. For GitHub Pages, set `CLIENT_BASE_PATH=/Write2Gather` and build the client with `VITE_API_URL` set to the deployed API origin.
 
 ## Ideas to extend it (great for learning)
 

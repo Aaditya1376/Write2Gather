@@ -127,6 +127,13 @@ textarea { width: 100%; resize: vertical; }
 .auth-wrap { min-height: 100%; display: flex; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(circle at 20% 10%, var(--accent-soft), transparent 50%), var(--bg); }
 .auth-card { width: 100%; max-width: 420px; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 32px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; }
 .auth-card h1 { font-size: 24px; margin: 10px 0 0; }
+.password-input { position: relative; display: flex; }
+.password-input input { width: 100%; padding-right: 46px; }
+.password-toggle { position: absolute; top: 50%; right: 8px; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; transform: translateY(-50%); border: 0; border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer; }
+.password-toggle:hover { background: var(--surface-2); color: var(--text); }
+.auth-forgot { display: flex; justify-content: flex-end; margin-top: -6px; font-size: 13px; }
+.form-success { background: #e8f7ee; color: #176b42; border-radius: 8px; padding: 10px 12px; font-size: 14px; }
+:root[data-theme="dark"] .form-success { background: #143426; color: #87e0b0; }
 
 /* ============ Dashboard ============ */
 .toolbar-row { display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 20px; }
