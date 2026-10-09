@@ -213,8 +213,3 @@ write2gather/
 - Image uploads and tables
 - Scaling to several servers with a Redis adapter
 - Moving the code to TypeScript
-
----
-
-
-
