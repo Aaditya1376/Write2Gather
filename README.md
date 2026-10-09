@@ -1,4 +1,5 @@
 # Write2Gather
+<<<<<<< HEAD
 
 **A real-time collaborative document editor** - several people type in the same document at once, see each other's cursors, comment, restore old versions and get help from an AI writing assistant.
 
@@ -107,3 +108,6 @@ client/src
 ## License
 
 MIT
+=======
+Real-time collaborative document editor with live cursors, sharing roles, comments, version history and an AI writing assistant. React, Node.js, Socket.IO, Yjs (CRDT), MongoDB.
+>>>>>>> 019f0d502ed15c6181915a339f75c256a973f5ef
