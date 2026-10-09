@@ -103,8 +103,4 @@ client/src
 - Redis adapter for Socket.IO to scale beyond one server instance
 - Integration tests with `supertest` + `mongodb-memory-server`
 - TypeScript migration
-<<<<<<< HEAD
-=======
-
->>>>>>> 57a6d26 (Update README)
 
