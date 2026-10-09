@@ -9,7 +9,6 @@ import { errorMiddleware } from "./utils/http.js";
 import { initSocket, flushAllRooms } from "./socket/index.js";
 import authRoutes from "./routes/auth.js";
 import docRoutes from "./routes/docs.js";
-import aiRoutes from "./routes/ai.js";
 import dns from "node:dns";
 dns.setServers(["8.8.8.8", "1.1.1.1"]); // use Google/Cloudflare DNS (fixes "querySrv ECONNREFUSED")
 
@@ -28,7 +27,6 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/docs", docRoutes);
-app.use("/api/ai", aiRoutes);
 
 app.use("/api", (_req, res) => res.status(404).json({ error: "Not found" }));
 app.use(errorMiddleware);

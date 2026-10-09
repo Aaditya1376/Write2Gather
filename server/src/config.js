@@ -18,9 +18,4 @@ export const config = {
   accessSecret: required("ACCESS_SECRET"),
   refreshSecret: required("REFRESH_SECRET"),
   isProd: process.env.NODE_ENV === "production",
-  ai: {
-    key: process.env.AI_API_KEY || "",
-    baseUrl: (process.env.AI_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, ""),
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-  },
 };

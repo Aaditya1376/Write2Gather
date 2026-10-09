@@ -10,7 +10,6 @@ Write2Gather is a collaborative document editor. Work on documents with other pe
 - Share documents as editors or viewers
 - Add comments and browse version history
 - Export documents as Markdown, HTML, or plain text
-- Use the optional AI writing assistant
 - Show or hide passwords and request a password reset
 
 ## Run locally
@@ -34,8 +33,6 @@ Run the server tests with:
 ```bash
 npm test
 ```
-
-The AI assistant is optional. Set `AI_API_KEY` in `server/.env` to enable it.
 
 ## Deployment
 

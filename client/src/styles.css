@@ -198,14 +198,6 @@ textarea { width: 100%; resize: vertical; }
 .comment-quote { margin: 0; padding: 4px 10px; border-left: 3px solid var(--accent); color: var(--muted); font-size: 13px; background: var(--surface-2); border-radius: 0 6px 6px 0; }
 .quote-chip { display: flex; justify-content: space-between; gap: 8px; background: var(--accent-soft); padding: 8px 10px; border-radius: 8px; font-size: 13px; }
 .reply { display: flex; gap: 8px; padding-left: 8px; border-left: 2px solid var(--border); } .reply p { font-size: 14px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 13px; }
-.chip:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); } .chip:disabled { opacity: 0.5; }
-.ai-output { display: flex; flex-direction: column; gap: 10px; }
-.ai-text { background: var(--surface-2); border-radius: 10px; padding: 12px; white-space: pre-wrap; font-size: 14px; max-height: 340px; overflow: auto; }
-.caret { display: inline-block; width: 7px; height: 14px; background: var(--accent); margin-left: 2px; vertical-align: middle; animation: blink 1s steps(2) infinite; }
-@keyframes blink { 50% { opacity: 0; } }
-
 /* ============ Rich text content (TipTap / ProseMirror) ============ */
 .ProseMirror { outline: none; min-height: 760px; font-family: Georgia, "Times New Roman", serif; font-size: 17px; line-height: 1.75; }
 .ProseMirror > * + * { margin-top: 0.75em; }

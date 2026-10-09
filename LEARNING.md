@@ -37,7 +37,7 @@ Explain: *How does a viewer's editor become read-only the instant the owner chan
 Build: `routes/versions.js` (read how `restoreSnapshot` replaces content through a normal Yjs transaction), `routes/comments.js`, the two panels.
 
 ## Step 8 - Extras
-AI streaming (`routes/ai.js` + `AIPanel.jsx` - Server-Sent Events and `ReadableStream`), export (`lib/export.js`), dark mode, print CSS.
+Export (`lib/export.js`), dark mode, and print CSS.
 
 ## Interview questions you should be able to answer
 1. Walk me through what happens from the moment I press a key until another user sees it.

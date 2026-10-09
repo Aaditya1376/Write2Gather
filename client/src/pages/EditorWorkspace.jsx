@@ -10,14 +10,13 @@ import TaskItem from "@tiptap/extension-task-item";
 import Placeholder from "@tiptap/extension-placeholder";
 import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
-import { Check, CloudOff, History, MessageSquare, Moon, Share2, Sparkles, Sun, Eye } from "lucide-react";
+import { Check, CloudOff, History, MessageSquare, Moon, Share2, Sun, Eye } from "lucide-react";
 import Avatar from "../components/Avatar.jsx";
 import Logo from "../components/Logo.jsx";
 import Toolbar from "../components/Toolbar.jsx";
 import ShareDialog from "../components/ShareDialog.jsx";
 import VersionPanel from "../components/VersionPanel.jsx";
 import CommentPanel from "../components/CommentPanel.jsx";
-import AIPanel from "../components/AIPanel.jsx";
 import ExportMenu from "../components/ExportMenu.jsx";
 import { api } from "../lib/api.js";
 import { colorForUser } from "../lib/format.js";
@@ -47,7 +46,7 @@ export default function EditorWorkspace({ meta, setMeta, ydoc, provider, role, p
   const canEdit = role === "owner" || role === "editor";
 
   const [title, setTitle] = useState(meta.title);
-  const [panel, setPanel] = useState(null); // "comments" | "history" | "ai" | null
+  const [panel, setPanel] = useState(null); // "comments" | "history" | null
   const [showShare, setShowShare] = useState(false);
   const [saveState, setSaveState] = useState("saved"); // "saved" | "saving"
   const [stats, setStats] = useState({ words: 0, chars: 0 });
@@ -159,7 +158,6 @@ export default function EditorWorkspace({ meta, setMeta, ydoc, provider, role, p
             <MessageSquare size={16} /> Comments{openComments > 0 && <span className="count">{openComments}</span>}
           </button>
           <button className={`btn ${panel === "history" ? "btn-active" : ""}`} onClick={() => togglePanel("history")}><History size={16} /> History</button>
-          <button className={`btn ${panel === "ai" ? "btn-active" : ""}`} onClick={() => togglePanel("ai")}><Sparkles size={16} /> AI</button>
           <ExportMenu editor={editor} title={meta.title} />
           <button className="btn btn-primary" onClick={() => setShowShare(true)}><Share2 size={16} /> Share</button>
         </div>
@@ -178,12 +176,11 @@ export default function EditorWorkspace({ meta, setMeta, ydoc, provider, role, p
         {panel && (
           <aside className="side-panel">
             <div className="panel-title">
-              {panel === "comments" ? "Comments" : panel === "history" ? "Version history" : "AI assistant"}
+              {panel === "comments" ? "Comments" : "Version history"}
               <button className="icon-btn" onClick={() => setPanel(null)} aria-label="Close panel">&times;</button>
             </div>
             {panel === "comments" && <CommentPanel docId={meta.id} editor={editor} role={role} data={commentData} />}
             {panel === "history" && <VersionPanel docId={meta.id} canEdit={canEdit} />}
-            {panel === "ai" && <AIPanel editor={editor} canEdit={canEdit} />}
           </aside>
         )}
       </div>
