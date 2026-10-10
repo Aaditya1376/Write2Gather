@@ -22,6 +22,9 @@ jobs:
       - name: Get project
         uses: actions/checkout@v4
 
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -34,6 +37,12 @@ jobs:
       - name: Build website
         run: npm run build -- --base=/Write2Gather/
         working-directory: client
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+
+      - name: Warn if the API is not configured
+        if: ${{ vars.VITE_API_URL == '' }}
+        run: echo "::warning::VITE_API_URL is empty; sign-in and document features need a deployed API server."
 
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
