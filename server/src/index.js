@@ -9,11 +9,9 @@ import { errorMiddleware } from "./utils/http.js";
 import { initSocket, flushAllRooms } from "./socket/index.js";
 import authRoutes from "./routes/auth.js";
 import docRoutes from "./routes/docs.js";
-import dns from "node:dns";
-dns.setServers(["8.8.8.8", "1.1.1.1"]); // use Google/Cloudflare DNS (fixes "querySrv ECONNREFUSED")
 
 const app = express();
-app.set("trust proxy", 1); // needed behind Render/Heroku so rate limiting sees real IPs
+app.set("trust proxy", 1); // Trust the API host's HTTPS proxy so rate limiting sees the client IP.
 
 app.use(helmet());
 app.use(cors({ origin: config.clientUrl, credentials: true }));
